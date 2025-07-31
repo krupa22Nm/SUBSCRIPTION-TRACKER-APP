@@ -1,0 +1,596 @@
+# Subscription Tracker App - HTML & CSS Project
+
+Below is a complete HTML and CSS implementation for a Subscription Tracker App that allows users to manage their subscriptions.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Tracker</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header styles */
+        header {
+            background-color: #4a6bff;
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+        
+        /* Main content */
+        main {
+            margin: 30px 0;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 3fr;
+            gap: 20px;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .total-stats {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .total-count {
+            font-size: 48px;
+            font-weight: 700;
+            color: #4a6bff;
+            margin: 10px 0;
+        }
+        
+        .total-cost {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2ecc71;
+        }
+        
+        .filters {
+            margin-top: 20px;
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #555;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+        
+        .filter-option:hover {
+            background-color: #f0f2ff;
+        }
+        
+        .filter-option.active {
+            background-color: #f0f2ff;
+            color: #4a6bff;
+            font-weight: 500;
+        }
+        
+        /* Subscriptions list */
+        .subscriptions {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .subscriptions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        .add-btn {
+            background-color: #4a6bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .add-btn:hover {
+            background-color: #3a5be0;
+        }
+        
+        .subscriptions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .subscription-item {
+            display: grid;
+            grid-template-columns: 40px 1fr 120px 100px 80px;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .subscription-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .service-logo {
+            width: 32px;
+            height: 32px;
+            background-color: #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #666;
+        }
+        
+        .service-name {
+            font-weight: 600;
+        }
+        
+        .category {
+            font-size: 14px;
+            color: #666;
+            background-color: #eef2ff;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        
+        .price {
+            font-weight: 700;
+            color: #27ae60;
+        }
+        
+        .next-payment {
+            font-size: 14px;
+            color: #888;
+        }
+        
+        .status {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status.active {
+            background-color: #e6f7ee;
+            color: #27ae60;
+        }
+        
+        .status.expiring {
+            background-color: #fff8e6;
+            color: #f39c12;
+        }
+        
+        /* Add subscription modal (hidden by default) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .close-btn:hover {
+            color: #333;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: #4a6bff;
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-secondary {
+            background-color: #ddd;
+            border: none;
+            color: #555;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ccc;
+        }
+        
+        .btn-primary {
+            background-color: #4a6bff;
+            border: none;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #3a5be0;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                margin-bottom: 20px;
+            }
+            
+            .subscriptions-list {
+                overflow-x: auto;
+            }
+            
+            .subscription-item {
+                grid-template-columns: 32px 1fr 80px 80px 60px;
+                font-size: 14px;
+            }
+            
+            .service-logo {
+                width: 28px;
+                height: 28px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i>📋</i> SubscriptionTracker
+            </div>
+            <div class="user-menu">
+                <i>👤</i>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <main>
+            <div class="dashboard">
+                <aside class="sidebar">
+                    <div class="total-stats">
+                        <div class="total-count">8</div>
+                        <div>Total Subscriptions</div>
+                        <div class="total-cost">$124.50</div>
+                        <div>Monthly Cost</div>
+                    </div>
+                    
+                    <div class="filters">
+                        <div class="filter-title">Filter by Category</div>
+                        <div class="filter-options">
+                            <div class="filter-option active">All Subscriptions</div>
+                            <div class="filter-option">Entertainment</div>
+                            <div class="filter-option">Productivity</div>
+                            <div class="filter-option">Education</div>
+                            <div class="filter-option">Lifestyle</div>
+                        </div>
+                    </div>
+                </aside>
+                
+                <section class="subscriptions">
+                    <div class="subscriptions-header">
+                        <h1 class="page-title">My Subscriptions</h1>
+                        <button class="add-btn" id="addSubscriptionBtn">
+                            <i>+</i> Add Subscription
+                        </button>
+                    </div>
+                    
+                    <div class="subscriptions-list">
+                        <div class="subscription-item">
+                            <div class="service-logo">N</div>
+                            <div>
+                                <div class="service-name">Netflix</div>
+                                <div class="category">Entertainment</div>
+                            </div>
+                            <div class="price">$15.99</div>
+                            <div class="next-payment">Aug 15, 2023</div>
+                            <div class="status active">Active</div>
+                        </div>
+                        
+                        <div class="subscription-item">
+                            <div class="service-logo">S</div>
+                            <div>
+                                <div class="service-name">Spotify</div>
+                                <div class="category">Music</div>
+                            </div>
+                            <div class="price">$9.99</div>
+                            <div class="next-payment">Aug 20, 2023</div>
+                            <div class="status active">Active</div>
+                        </div>
+                        
+                        <div class="subscription-item">
+                            <div class="service-logo">M</div>
+                            <div>
+                                <div class="service-name">Microsoft 365</div>
+                                <div class="category">Productivity</div>
+                            </div>
+                            <div class="price">$9.99</div>
+                            <div class="next-payment">Aug 25, 2023</div>
+                            <div class="status active">Active</div>
+                        </div>
+                        
+                        <div class="subscription-item">
+                            <div class="service-logo">A</div>
+                            <div>
+                                <div class="service-name">Amazon Prime</div>
+                                <div class="category">Shopping</div>
+                            </div>
+                            <div class="price">$14.99</div>
+                            <div class="next-payment">Sep 1, 2023</div>
+                            <div class="status expiring">Expiring</div>
+                        </div>
+                        
+                        <div class="subscription-item">
+                            <div class="service-logo">C</div>
+                            <div>
+                                <div class="service-name">Canva Pro</div>
+                                <div class="category">Design</div>
+                            </div>
+                            <div class="price">$12.99</div>
+                            <div class="next-payment">Aug 10, 2023</div>
+                            <div class="status active">Active</div>
+                        </div>
+                        
+                        <div class="subscription-item">
+                            <div class="service-logo">D</div>
+                            <div>
+                                <div class="service-name">Dropbox Plus</div>
+                                <div class="category">Storage</div>
+                            </div>
+                            <div class="price">$11.99</div>
+                            <div class="next-payment">Aug 12, 2023</div>
+                            <div class="status active">Active</div>
+                        </div>
+                        
+                        <div class="subscription-item">
+                            <div class="service-logo">L</div>
+                            <div>
+                                <div class="service-name">LinkedIn Premium</div>
+                                <div class="category">Career</div>
+                            </div>
+                            <div class="price">$39.99</div>
+                            <div class="next-payment">Aug 5, 2023</div>
+                            <div class="status active">Active</div>
+                        </div>
+                        
+                        <div class="subscription-item">
+                            <div class="service-logo">U</div>
+                            <div>
+                                <div class="service-name">Udemy Pro</div>
+                                <div class="category">Education</div>
+                            </div>
+                            <div class="price">$34.99</div>
+                            <div class="next-payment">Aug 8, 2023</div>
+                            <div class="status active">Active</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add Subscription Modal -->
+    <div class="modal" id="addSubscriptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Subscription</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            
+            <form>
+                <div class="form-group">
+                    <label for="serviceName" class="form-label">Service Name</label>
+                    <input type="text" id="serviceName" class="form-control" placeholder="e.g. Netflix, Spotify">
+                </div>
+                
+                <div class="form-group">
+                    <label for="category" class="form-label">Category</label>
+                    <select id="category" class="form-control">
+                        <option value="">Select a category</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="music">Music</option>
+                        <option value="productivity">Productivity</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="design">Design</option>
+                        <option value="storage">Storage</option>
+                        <option value="career">Career</option>
+                        <option value="education">Education</option>
+                        <option value="lifestyle">Lifestyle</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="price" class="form-label">Monthly Price ($)</label>
+                    <input type="number" id="price" class="form-control" placeholder="0.00" step="0.01">
+                </div>
+                
+                <div class="form-group">
+                    <label for="nextPayment" class="form-label">Next Payment Date</label>
+                    <input type="date" id="nextPayment" class="form-control">
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Add Subscription</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // Simple JavaScript to handle modal functionality
+        const modal = document.getElementById('addSubscriptionModal');
+        const addBtn = document.getElementById('addSubscriptionBtn');
+        const closeBtn = document.querySelector('.close-btn');
+        
+        addBtn.addEventListener('click', () => {
+            modal.style.display = 'flex';
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+        
+        // Filter functionality (basic)
+        const filterOptions = document.querySelectorAll('.filter-option');
+        filterOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                filterOptions.forEach(opt => opt.classList.remove('active'));
+                option.classList.add('active');
+                // In a real app, this would filter the subscriptions
+            });
+        });
+    </script>
+</body>
+</html>
+```
